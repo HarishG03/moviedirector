@@ -5,6 +5,7 @@ const path = require('path')
 const app = express()
 const dbPath = path.join(__dirname, 'moviesData.db')
 let db = null
+app.use(express.json()); 
 const connectServerAndDatabase = async () => {
   try {
     db = await open({
