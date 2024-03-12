@@ -41,14 +41,14 @@ app.post('/movies/', async (request, response) => {
 })
 
 app.get('/movies/:movieId/', async (request, response) => {
-  let movieId = request.params
+  let {movieId} = request.params
   let query = `SELECT * FROM movie WHERE movie_id = ${movieId}`
   const result = await db.get(query)
   response.send(result)
 })
 
 app.put('/movies/:movieId/', async (request, response) => {
-  const movieId = request.params
+  const {movieId} = request.params
   const movieDetails = request.body
   const {directorId, movieName, leadActor} = movieDetails
 
@@ -63,7 +63,7 @@ app.put('/movies/:movieId/', async (request, response) => {
 })
 
 app.delete('/movies/:movieId/', async (request, response) => {
-  let movieId = request.params
+  let {movieId} = request.params
   const query = `DELETE FROM movie WHERE movie_id = ${movieId}`
   await db.run(query)
   response.send('Movie Removed')
@@ -76,8 +76,8 @@ app.get('/directors/', async (request, response) => {
 })
 
 app.get('/directors/:directorId/movies/', async (request, response) => {
-  let directorId = request.params
-  let query = `SELECT movie_name AS movieName FROM movie_table LEFT JOIN director_table ON movie.director_id = director.director_id`
+  let {directorId} = request.params
+  let query = `SELECT movie_name AS movieName FROM movie LEFT JOIN director ON movie.director_id = director.director_id WHERE director.director_id = ${directorId}`
   const moviesArray = await db.all(query)
   response.send(
     moviesArray.map(eachMovie => ({movieName: eachMovie.movie_name})),
