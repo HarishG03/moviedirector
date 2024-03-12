@@ -5,7 +5,7 @@ const path = require('path')
 const app = express()
 const dbPath = path.join(__dirname, 'moviesData.db')
 let db = null
-app.use(express.json()); 
+app.use(express.json())
 const connectServerAndDatabase = async () => {
   try {
     db = await open({
@@ -35,7 +35,7 @@ app.post('/movies/', async (request, response) => {
   const movieDetails = request.body
   const {directorId, movieName, leadActor} = movieDetails
 
-  let query = `INSERT INTO movie (director_id,movie_id,lead_actor) VALUES (${directorId},${movieName},${leadActor})`
+  let query = `INSERT INTO movie (director_id,movie_id,lead_actor) VALUES (${directorId},'${movieName}','${leadActor}')`
   await db.run(query)
   response.send('Movie Successfully Added')
 })
@@ -55,8 +55,8 @@ app.put('/movies/:movieId/', async (request, response) => {
   let query = `UPDATE movie_table
               SET 
               director_id = ${directorId},
-              movie_name = ${movieName},
-              lead_actor = ${leadActor}
+              movie_name = '${movieName}',
+              lead_actor = '${leadActor}'
               WHERE movie_id = ${movieId}`
   await db.run(query)
   response.send('Movie Details Updated')
